@@ -1,0 +1,18 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/studenti?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      #Quanto l'applicazione parte interagisce con il database. ddl-auto values:
+      # create-drop -> creazione del db all'avvio e distruzione alla chiusura dell'applicazione
+      #update -> aggiorna il db con le tabelle nuove, modifica quelle attuali, non elimina le eventuali colonne che non esistono pi?
+      #Le tabelle vengono aggiornate in base ai valori delle classi
+      #validated -> confronta le entit? con le tabelle e solleva eccezioni se ci sono incongruenze
+      #none: non viene fatto nulla (da usare assolutamente in produzione per non toccare la struttura del database)
+      ddl-auto: update
