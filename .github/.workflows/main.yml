@@ -1,0 +1,57 @@
+name: Build & Deploy spring app # Nome della pipeline
+on: #definisce il trigger dell'azione
+  push:
+    branches:
+      - master
+    # Ad ogni push viene attivata la pipeline
+    # I componenti principali di una pipeline sono: nome, trigger, jobs
+    # Una pipeline può avere uno o più jobs
+    # Un job e' composto da un nome, un runner e degli step
+    # Uno step e' composto da un nome e o un'azione (uses) o un comando (run)
+    # Un'azione può avere dei parametri (with)
+    # I comandi possono essere multipli per lo stesso step (|)
+jobs:
+  build-deploy: #Nome del job
+    name: build and deploy this app # Descrizione della pipeline
+    runs-on: ubuntu-latest # Macchina virtuale nella quale viene eseguita la pipeline
+    steps: # Passi che la macchina deve compiere
+      - name: checkout code
+        uses: actions/checkout@v4
+      # Stiamo usando un'azione di Github
+      # Un'azione di Github e' composta dalla stringa: actions/(nome dell'azione)@(versione dell'azione)
+      - name: Setup jdk 21
+        uses: actions/setup-java@v3
+        with: # Introduce i parametri dell'azione
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Unit Tests
+        run: mvn -B test --file pom.xml
+
+      - name: Build the app
+        run: | #simbolo usato per introdurre più comandi
+          mvn clean
+          mvn -B package --file pom.xml
+
+      # Costruiamo l'immagine del container senza salvarla per verificare che non ci siano errori di compilazione
+      - name: Build docker image
+        uses: docker/build-push-action@v2 # Non utilizziamo un'azione di Github, ma un'azione di Docker
+        with:
+          context: . #Percorso del dockerfile per la build
+          dockerfile: Dockerfile
+          push: false #In questo step verifichiamo solo se siamo in grado di fare la build. Faremo la push successivamente
+          tags:  ${{ secrets.DOCKER_HUB_USERNAME }}/todo:latest #<dockerhub-username>/<repository-name>:<tag>
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Push to docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: . #Percorso del dockerfile per la build
+          dockerfile: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo:latest
