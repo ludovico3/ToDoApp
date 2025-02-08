@@ -40,12 +40,12 @@ jobs:
           context: . #Percorso del dockerfile per la build
           dockerfile: Dockerfile
           push: false #In questo step verifichiamo solo se siamo in grado di fare la build. Faremo la push successivamente
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo:latest #<dockerhub-username>/<repository-name>:<tag>
+          tags: ludo2025/todo:latest #<dockerhub-username>/<repository-name>:<tag>
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          username: ludo2025
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Push to docker Hub
@@ -54,4 +54,4 @@ jobs:
           context: . #Percorso del dockerfile per la build
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/todo:latest
+          tags: ludo2025/todo:latest
