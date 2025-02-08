@@ -10,19 +10,21 @@ services:
     volumes:
       - todoVol:/var/lib/mysql
     networks:
-      - spring-network
+      - todo-network
 
   myapp:
     container_name: myapp
     image: ludo2025/todo:latest
     ports:
       - 8083:8082
+    environment:
+      MYSQL_PASS: ${MYSQL_PASS}
     networks:
       - todo-network
     depends_on:
       - mysql
 networks:
-  spring-network:
+  todo-network:
     driver: bridge
 
 volumes:
