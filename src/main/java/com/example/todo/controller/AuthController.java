@@ -52,11 +52,19 @@ public class AuthController {
     @DeleteMapping("/deleteUser")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
         try {
+            token = token.replace("Bearer ","").trim();
+
+
             authService.deleteUser(token);
             return ResponseEntity.ok(Map.of("message", "Utente eliminato con successo"));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
         }
+
+
+
+
+
     }
 
 }
