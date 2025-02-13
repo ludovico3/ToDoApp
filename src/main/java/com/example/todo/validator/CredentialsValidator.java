@@ -1,7 +1,6 @@
 package com.example.todo.validator;
 
 import com.example.todo.dto.AuthDTO;
-import com.example.todo.dto.CredentialsDto;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;

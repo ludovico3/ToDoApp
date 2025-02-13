@@ -21,7 +21,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthDTO credentials) {
         try {
-            String message = authService.register(credentials.getUsername(), credentials.getPassword());
+            String message = authService.register(credentials);
             return ResponseEntity.ok(Map.of("message", message));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
@@ -31,7 +31,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO credentials) {
         try {
-            String token = authService.login(credentials.getUsername(), credentials.getPassword());
+            String token = authService.login(credentials);
             return ResponseEntity.ok(Map.of("token", token)); // 🔹 Ora il token è unico per ogni utente
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
