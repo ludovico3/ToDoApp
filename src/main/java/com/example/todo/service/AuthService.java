@@ -102,5 +102,14 @@ public class AuthService {
         userTokens.remove(user.getUsername());
         sessions.remove(token);
     }
+
+    public List<User> getAllUsers() {
+      return userRepository.findAll(userRepository);
+
+
+
+    }
+
+
 }
 

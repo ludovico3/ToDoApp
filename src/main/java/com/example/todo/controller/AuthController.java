@@ -18,6 +18,15 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<?> getAllUsers() {
+      return ResponseEntity.ok(authService.getAllUsers());
+    }
+
+
+
+
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthDTO credentials) {
         try {
