@@ -19,12 +19,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         System.out.println("AuthInterceptor: preHandle called");
         // In questo punto recuperiamo il token dall'header della request
         String token = request.getHeader("Authorization");
-        token = token.replace("Bearer ","").trim();// Recuperiamo il token dall'header
         System.out.println(token);
         if (token == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token mancante");
             return false;
         }
+
+        token = token.replace("Bearer ","").trim();// Recuperiamo il token dall'header
+
+
         // Ogni volta che eseguiamo il login viene creata in memoria una coppia token-utente
         // In fase di utilizzo degli end-point dell'app che richiedono autenticazione verifichiamo se esiste
         // una coppia utente-token valida recuperando l'utente dalla sessione tramite token

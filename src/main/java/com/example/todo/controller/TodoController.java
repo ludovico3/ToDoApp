@@ -14,7 +14,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/todos")
-//localhost:8093/api/prova
+//localhost:8083/api/todos/create
+
 public class TodoController {
 
     @Autowired
