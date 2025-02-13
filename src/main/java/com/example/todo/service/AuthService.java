@@ -104,7 +104,7 @@ public class AuthService {
     }
 
     public List<User> getAllUsers() {
-      return userRepository.findAll(userRepository);
+      return userRepository.findAll();
 
 
 
