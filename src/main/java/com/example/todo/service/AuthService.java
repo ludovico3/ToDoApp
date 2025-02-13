@@ -1,14 +1,13 @@
 package com.example.todo.service;
 
+import com.example.todo.dto.AuthDTO;
 import com.example.todo.entity.User;
 import com.example.todo.repository.UserRepository;
+import com.example.todo.validator.CredentialsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -18,7 +17,17 @@ public class AuthService {
     private Map<String, User> sessions = new HashMap<>(); // Mappa sessioni (token -> utente)
     private Map<String, String> userTokens = new HashMap<>(); // Mappa username -> token (per verificare se è già autenticato)
     // Se l'utente e' già presente nel db, lanciamo un'eccezione
-    public String register(String username, String password) {
+    public String register(AuthDTO credentials) {
+        List<String> errors = CredentialsValidator.validateCredentials(credentials);
+        if(!errors.isEmpty()) {
+            String message = "Category is not valid";
+            for(String e: errors) {
+                message += "; " + e;
+            }
+            throw new RuntimeException(message);
+        }
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username già in uso!");
         }
@@ -31,7 +40,19 @@ public class AuthService {
         return "Utente registrato con successo!";
     }
     // Recupera l'utente dal db
-    public String login(String username, String password) {
+    public String login(AuthDTO credentials) {
+        List<String> errors = CredentialsValidator.validateCredentials(credentials);
+
+        if (!errors.isEmpty()) {    String message = "Category is not valid";
+            for(String e: errors) {
+                message += "; " + e;
+            }
+            throw new RuntimeException(message);
+        }
+
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
+
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
             User user = userOpt.get();
@@ -63,7 +84,7 @@ public class AuthService {
             userTokens.remove(user.getUsername()); // Rimuoviamo l'utente dalla mappa username-token
             sessions.remove(token); // Rimuoviamo il token dalla sessione
         } else {
-            throw new RuntimeException("Nessun utente loggato");
+            throw new RuntimeException("Nessun utente loggato o token non valido");
         }
     }
     // Nel delete verifichiamo che il token esista

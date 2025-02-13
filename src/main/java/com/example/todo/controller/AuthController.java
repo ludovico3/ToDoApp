@@ -11,7 +11,7 @@ import java.util.Map;
 //locahost:8093/auth/register
 //localhost:8093/auth/login
 //localhost:8093/auth/logout
-//localhost:8093/auth/deleteUser
+//localhost:8093/auth/deleteUser/
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
