@@ -15,7 +15,7 @@ jobs:
     name: build and deploy this app # Descrizione della pipeline
     runs-on: ubuntu-latest # Macchina virtuale nella quale viene eseguita la pipeline
     steps: # Passi che la macchina deve compiere
-      - name: checkout code
+      - name: checkout code # Clone del repository
         uses: actions/checkout@v4
       # Stiamo usando un'azione di Github
       # Un'azione di Github e' composta dalla stringa: actions/(nome dell'azione)@(versione dell'azione)
@@ -25,10 +25,10 @@ jobs:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Unit Tests
+      - name: Unit Tests # Test del pom.xml
         run: mvn -B test --file pom.xml
 
-      - name: Build the app
+      - name: Build the app 
         run: | #simbolo usato per introdurre più comandi
           mvn clean
           mvn -B package --file pom.xml
