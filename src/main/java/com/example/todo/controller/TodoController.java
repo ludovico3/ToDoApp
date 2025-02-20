@@ -15,6 +15,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/todos")
 //localhost:8083/api/todos/create
+//localhost:8083/api/todos/update
+//localhost:8083/api/todos/all
+//localhost:8083/api/todos/{todoId}
+//localhost:8083/api/todos/delete/{Id}
 
 public class TodoController {
 
@@ -57,7 +61,7 @@ public class TodoController {
     public ResponseEntity<?> deleteTodo(@PathVariable Long id) {
         try {
             todoService.delete(id);
-            return ResponseEntity.ok(Map.of("message", "Utente eliminato con successo"));
+            return ResponseEntity.ok(Map.of("message", "Todo eliminato con successo"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
